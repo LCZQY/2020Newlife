@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Ruanmou.DB.Interface">
+      <HintPath>dll\Ruanmou.DB.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Ruanmou.DB.MySql">
+      <HintPath>dll\Ruanmou.DB.MySql.dll</HintPath>
+    </Reference>
+    <Reference Include="Ruanmou.DB.Oracle">
+      <HintPath>dll\Ruanmou.DB.Oracle.dll</HintPath>
+    </Reference>
+    <Reference Include="Ruanmou.DB.SqlServer">
+      <HintPath>dll\Ruanmou.DB.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Ruanmou.Model">
+      <HintPath>dll\Ruanmou.Model.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  
+
+</Project>

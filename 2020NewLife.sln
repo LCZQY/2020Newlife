@@ -3,11 +3,57 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "泛型", "泛型", "{3F66C960-4EF7-4C56-A9E2-FF72A3851A2A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2020-01-07(泛型)", "2020-01-07(泛型)", "{3F66C960-4EF7-4C56-A9E2-FF72A3851A2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Dome\Example.csproj", "{57483CA1-E4E9-48B1-A60B-E54D948C79C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2020-01-07(反射)", "2020-01-07(反射)", "{87E25AAE-ADD8-4D0C-ABD5-1A101C8F331C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example02", "Example02\Example02.csproj", "{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2020-01-08(特性)", "2020-01-08(特性)", "{9E086287-4254-4399-B968-55BD2300A881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example03", "Example03\Example03.csproj", "{9EA7310D-31D8-415D-963C-C2A8747134D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "反射 + 特性 + 泛型 实战", "反射 + 特性 + 泛型 实战", "{B5178409-BF43-4C47-9005-96BCAA41CC73}"
+	ProjectSection(SolutionItems) = preProject
+		需求.txt = 需求.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlHelpr", "MySqlHelpr\MySqlHelpr.csproj", "{C10572CC-4060-4003-BAC0-8545CBB724BF}"
 EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57483CA1-E4E9-48B1-A60B-E54D948C79C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57483CA1-E4E9-48B1-A60B-E54D948C79C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57483CA1-E4E9-48B1-A60B-E54D948C79C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57483CA1-E4E9-48B1-A60B-E54D948C79C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA7310D-31D8-415D-963C-C2A8747134D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA7310D-31D8-415D-963C-C2A8747134D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA7310D-31D8-415D-963C-C2A8747134D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA7310D-31D8-415D-963C-C2A8747134D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10572CC-4060-4003-BAC0-8545CBB724BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10572CC-4060-4003-BAC0-8545CBB724BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10572CC-4060-4003-BAC0-8545CBB724BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10572CC-4060-4003-BAC0-8545CBB724BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{57483CA1-E4E9-48B1-A60B-E54D948C79C9} = {3F66C960-4EF7-4C56-A9E2-FF72A3851A2A}
+		{8FA11F40-EB64-4E2A-A47F-1BB20DF3119C} = {87E25AAE-ADD8-4D0C-ABD5-1A101C8F331C}
+		{9EA7310D-31D8-415D-963C-C2A8747134D3} = {9E086287-4254-4399-B968-55BD2300A881}
+		{B5178409-BF43-4C47-9005-96BCAA41CC73} = {9E086287-4254-4399-B968-55BD2300A881}
+		{C10572CC-4060-4003-BAC0-8545CBB724BF} = {B5178409-BF43-4C47-9005-96BCAA41CC73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D6AA132-EEA3-4394-89D7-D4F152317D5D}
