@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MySqlHelpr.Attributes;
 
 namespace MySqlHelpr.Model
 {
@@ -9,16 +7,20 @@ namespace MySqlHelpr.Model
     /// </summary>
     public class IdentityRole
     {
+        [Required]
         public string Id { get; set; }
 
+        [Required]
         public string OrganizationId { get; set; }
 
-        public string ConcurrencyStamp {get;set;}
+        public string ConcurrencyStamp { get; set; }
 
-        public string Discrinminator { get; set; }
+        public string Discriminator { get; set; }
 
         public bool IsDeleted { get; set; }
 
+        [Required]
+        [StringLength(1, 6)]
         public string Name { get; set; }
 
         public string NormalizedName { get; set; }
