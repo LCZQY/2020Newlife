@@ -7,9 +7,9 @@ namespace MySqlHelpr.Model
     /// <summary>
     /// 用户表
     /// </summary>
-    public class User
+    public class User : BaseModel
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+      
 
         public string UserId { get; set; }
 

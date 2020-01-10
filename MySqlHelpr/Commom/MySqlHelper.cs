@@ -4,6 +4,8 @@ using System.Text;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
+using MySqlHelpr.Model;
+
 namespace MySqlHelpr.Commom
 {
     public static class MySqlHelper
@@ -12,9 +14,9 @@ namespace MySqlHelpr.Commom
         /// <summary>
         /// 查询操作
         /// </summary>
-        public static async Task<List<T>> GetListAsync<T>(this T model) where T : class
+        public static async Task<List<T>> GetListAsync<T>(this T model) where T : BaseModel
         {
-            string sql = SplicingSql<T>.SelectSql(model);
+            string sql = SplicingSql<T>.SelectSql();
             var da = await AdoDataBasics.GetDataTableAsync(sql, CommandType.Text);
             List<T> list = new List<T> { };
             if (da.Rows.Count > 0)
@@ -30,9 +32,9 @@ namespace MySqlHelpr.Commom
         /// <summary>
         /// 查询操作
         /// </summary>
-        public static async Task<List<T>> GetListAsync<T>(this T model, string id) where T : class
+        public static async Task<List<T>> GetListAsync<T>(this T model, string id) where T : BaseModel
         {
-            string sql = SplicingSql<T>.SelectSql(model, id);
+            string sql = SplicingSql<T>.SelectSql(id);
             var da = await AdoDataBasics.GetDataTableAsync(sql, CommandType.Text);
             List<T> list = new List<T> { };
             if (da.Rows.Count > 0)
@@ -50,9 +52,9 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<bool> InSertAsync<T>(this T model) where T : class
+        public static async Task<bool> InSertAsync<T>(this T model) where T : BaseModel
         {
-            string sql = SplicingSql<T>.InsertSql(model);
+            string sql = SplicingSql<T>.InsertSql();
             var parp = SplicingSql<T>.ParameterArray(model);
             return await AdoDataBasics.ExecuteNonqueryAsync(sql, CommandType.Text, parp);
         }
@@ -62,7 +64,7 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<bool> InSertRangeAsync<T>(this List<T> model) where T : class
+        public static async Task<bool> InSertRangeAsync<T>(this List<T> model) where T : BaseModel
         {
             return true;
         }
@@ -74,9 +76,9 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<bool> UpdateAsync<T>(this T model) where T : class
+        public static async Task<bool> UpdateAsync<T>(this T model) where T : BaseModel
         {
-            string sql = SplicingSql<T>.UpdataSql(model);
+            string sql = SplicingSql<T>.UpdataSql();
             var parp = SplicingSql<T>.ParameterArray(model);
             return await AdoDataBasics.ExecuteNonqueryAsync(sql, CommandType.Text, parp);
         }
@@ -86,9 +88,9 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<bool> UpdateAsync<T>(this T model, string id) where T : class
+        public static async Task<bool> UpdateAsync<T>(this T model, string id) where T : BaseModel
         {
-            string sql = SplicingSql<T>.UpdataSql(model, id);
+            string sql = SplicingSql<T>.UpdataSql(id);
             var parp = SplicingSql<T>.ParameterArray(model);
             return await AdoDataBasics.ExecuteNonqueryAsync(sql, CommandType.Text, parp);
         }
@@ -98,33 +100,33 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<bool> RemoveAsync<T>(this T model, string id) where T : class
+        public static async Task<bool> RemoveAsync<T>(this T model, string id) where T : BaseModel
         {
-            string sql = SplicingSql<T>.RemoveSql(model, id);
+            string sql = SplicingSql<T>.RemoveSql(id);
             var parp = SplicingSql<T>.ParameterArray(model);
             return await AdoDataBasics.ExecuteNonqueryAsync(sql, CommandType.Text, parp);
         }
 
 
         /// <summary>
-        ///  初始化实体
+        /// 初始化实体
         /// </summary>
-        /// <param name="AdminUser"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="omodel"></param>
         /// <param name="row"></param>
-        /// <param name="row"></param>
+        /// <returns></returns>
         private static Object LoadEntity<T1>(T1 omodel, DataRow row)
         {
             var type = omodel.GetType();
             var entity = Activator.CreateInstance(typeof(T1));
             foreach (var pror in type.GetProperties())
             {
-
                 var rowValue = row[pror.Name];
                 var dataType = (rowValue.GetType() ?? typeof(object)).Name;//获得属性的类型                            
                 switch (dataType)
                 {
                     case "String":
-                        rowValue = rowValue != DBNull.Value ? rowValue.ToString() : string.Empty;
+                        rowValue = rowValue is DBNull ? string.Empty : rowValue.ToString();
                         break;
                     case "DateTime":
                         rowValue = rowValue != DBNull.Value ? Convert.ToDateTime(rowValue) : (DateTime?)null;
@@ -145,7 +147,7 @@ namespace MySqlHelpr.Commom
                         rowValue = rowValue != DBNull.Value ? Convert.ToBoolean(rowValue) : (bool?)null;
                         break;
                     default:
-                        throw new Exception("该数据类型不能够被转化");                        
+                        throw new Exception("该数据类型不能够被转化");
                 }
                 pror.SetValue(entity, rowValue);
             }

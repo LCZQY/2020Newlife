@@ -5,11 +5,8 @@ namespace MySqlHelpr.Model
     /// <summary>
     /// 用户权限表
     /// </summary>
-    public class IdentityRole
-    {
-        [Required]
-        public string Id { get; set; }
-
+    public class IdentityRole : BaseModel
+    {       
         [Required]
         public string OrganizationId { get; set; }
 

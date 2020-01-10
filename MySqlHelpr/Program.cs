@@ -1,6 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using MySqlHelpr.Attributes;
-using MySqlHelpr.Commom;
+﻿using MySqlHelpr.Attributes;
 using MySqlHelpr.Model;
 using System;
 

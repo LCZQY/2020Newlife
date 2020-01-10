@@ -1,12 +1,28 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlHelpr.Model;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace MySqlHelpr.Commom
 {
 
-    public static class SplicingSql<T> where T : class
+    /// <summary>
+    /// 拼接SQL语句
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+
+    public class SplicingSql<T> where T: BaseModel
     {
+        static SplicingSql()
+        {
+            Type t = typeof(T);
+
+            _field = string.Join(",", t.GetProperties().Select(y => y.Name)); //拿到每个属性然后再用逗号隔开           
+            _parameterInset = string.Join(",", t.GetProperties().Select(y => $"@{y.Name}"));
+            _parameterUpdata = string.Join(",", t.GetProperties().Where(y=> !y.Name.Equals("Id")).Select(y => $"{y.Name} =@{y.Name}"));
+
+        }
 
         /// <summary>
         /// 参数化后的字符串
@@ -23,34 +39,13 @@ namespace MySqlHelpr.Commom
 
 
         /// <summary>
-        /// 组合参数化写法字符串
-        /// </summary>
-        public static void CreateParameter(T oObject)
-        {
-            _field = "";
-            _parameterInset = "";
-            _parameterUpdata = "";
-            Type t = oObject.GetType();
-            foreach (var pi in t.GetProperties())
-            {
-                _field += pi.Name + ",";
-                _parameterInset += "@" + pi.Name + ",";
-                _parameterUpdata += pi.Name + "=@" + pi.Name + ",";
-            }
-            _field = _field.Substring(0, _field.LastIndexOf(','));
-            _parameterInset = _parameterInset.Substring(0, _parameterInset.LastIndexOf(','));
-            _parameterUpdata = _parameterUpdata.Substring(0, _parameterUpdata.LastIndexOf(','));
-        }
-
-        /// <summary>
         ///查询SQL
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="oObject"></param>
         /// <returns></returns>
-        public static string SelectSql(T oObject)
-        {
-            CreateParameter(oObject);
+        public static string SelectSql() 
+        {                     
             return $"select {_field} from {typeof(T).Name};";
         }
 
@@ -61,9 +56,8 @@ namespace MySqlHelpr.Commom
         /// <param name="oObject"></param>
         /// <param name="id">查找Id</param>
         /// <returns></returns>
-        public static string SelectSql(T oObject, string id)
+        public static string SelectSql(string id) 
         {
-            CreateParameter(oObject);
             return $"select {_field} from {typeof(T).Name} Where Id = '{id}';";
         }
 
@@ -74,9 +68,8 @@ namespace MySqlHelpr.Commom
         /// <typeparam name="T"></typeparam>
         /// <param name="oObject"></param>
         /// <returns></returns>
-        public static string InsertSql(T oObject)
+        public static string InsertSql() 
         {
-            CreateParameter(oObject);
             return $"insert into {typeof(T).Name}( {_field} ) values ( {_parameterInset});";
         }
 
@@ -85,9 +78,8 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="oObject"></param>
         /// <returns></returns>
-        public static string UpdataSql(T oObject)
+        public static string UpdataSql()
         {
-            CreateParameter(oObject);
             return $"update  {typeof(T).Name} set {_parameterUpdata} ;";
         }
 
@@ -96,9 +88,8 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="oObject"></param>
         /// <returns></returns>
-        public static string UpdataSql(T oObject, string id)
+        public static string UpdataSql(string id)
         {
-            CreateParameter(oObject);
             return $"update  {typeof(T).Name} set {_parameterUpdata}  where Id = '{id}';";
         }
 
@@ -107,9 +98,8 @@ namespace MySqlHelpr.Commom
         /// </summary>
         /// <param name="oObject"></param>
         /// <returns></returns>
-        public static string RemoveSql(T oObject, string id)
+        public static string RemoveSql(string id)
         {
-            CreateParameter(oObject);
             return $"delete from {typeof(T).Name} where Id = '{id}';";
         }
 
@@ -120,52 +110,10 @@ namespace MySqlHelpr.Commom
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static MySqlParameter[] ParameterArray(T model)
+        public static MySqlParameter[] ParameterArray(T t)
         {
-            Type t = model.GetType();
-            try
-            {
-                MySqlParameter[] pars = new MySqlParameter[t.GetProperties().Length];
-                var i = 0;
-                foreach (PropertyInfo pi in t.GetProperties())
-                {
-                    var value = pi.GetValue(model, null) ?? "";//用pi.GetValue获得值
-                    var type = (value.GetType() ?? typeof(object)).Name;//获得属性的类型                            
-                    switch (type)
-                    {
-                        case "String":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.VarChar);
-                            break;
-                        case "DateTime":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.DateTime);
-                            break;
-                        case "Int32":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.Int32);
-                            break;
-                        case "Decimal":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.Decimal);
-                            break;
-                        case "Double":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.Float);
-                            break;
-                        case "Boolean":
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.Bit);
-                            break;
-                        default:
-                            pars[i] = new MySqlParameter("@" + pi.Name, MySqlDbType.VarChar);
-                            break;
-                    }
-                    pars[i].Value = value ?? null;
-                    i += 1;
-                }
-
-                return pars;
-            }
-            catch (Exception e)
-            {
-                string error = e.Message;
-                throw;
-            }
+            Type type = t.GetType();
+            return type.GetProperties().Select(y => new MySqlParameter($"@{y.Name}", y.GetValue(t) ?? DBNull.Value)).ToArray();
         }
 
     }
